@@ -2,7 +2,6 @@ const canvas = document.getElementById('canvas1');
 const ctx = canvas.getContext('2d');
 const CANVAS_WIDTH = canvas.width = 640;
 const CANVAS_HEIGHT = canvas.height = 360;
-console.log(ctx);
 
 //player stats
 let health = 100;
@@ -40,7 +39,15 @@ window.addEventListener('keydown', e =>{
       break;
   }
 });
+
+window.addEventListener('click', e =>{
+  console.log(e.x);
+  console.log(e.y);
+});
 function animate(){
+  ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+  ctx.fillText(bottomBarMessage, 65, 333,);
+  console.log(ctx);
   
   requestAnimationFrame(animate);
 }
