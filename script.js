@@ -18,13 +18,29 @@ let optionC = "credits";
 let optionD = null;
 
 //option selection
+let selectNumber = 1;
+let selected = false;
 
 window.addEventListener('keydown', e =>{
-  
+  switch(e.key){
+    case 'ArrowUp' :
+      selectNumber--;
+      break;
+    case 'ArrowLeft':
+      selectNumber--;
+      break;
+    case 'ArrowDown':
+      selectNumber++;
+      break;
+    case 'ArrowRight': 
+      selectNumber++;
+      break;
+    case 'x':
+      selected = true;
+      break;
+  }
 });
-
 function animate(){
-
   
   requestAnimationFrame(animate);
 }
