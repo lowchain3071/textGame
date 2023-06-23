@@ -41,13 +41,13 @@ window.addEventListener('keydown', e =>{
 });
 
 window.addEventListener('click', e =>{
-  console.log(e.x);
-  console.log(e.y);
+  
 });
+
 function animate(){
-  ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-  ctx.fillText(bottomBarMessage, 65, 333,);
-  console.log(ctx);
+  ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+  ctx.font = 50 + 'px' + 'Hevetica';
   
   requestAnimationFrame(animate);
 }
