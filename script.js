@@ -10,11 +10,11 @@ let energy = 100;
 
 //messages
 let bottomBarMessage = "Navigate Using Arrow Keys";
-let middleMessage = "HAHA FUNNY RPG"
-let optionA = "Load Game";
-let optionB = "New Game";
-let optionC = "Credits";
-let optionD = "How to Play";
+let middleMessage;
+let optionA;
+let optionB;
+let optionC;
+let optionD;
 
 //option selection
 let selectNumber = 0;
@@ -54,19 +54,42 @@ window.addEventListener('keydown', e => {
       break;
   }
 });
+started = false;
 
 window.addEventListener('click', e => {
   console.log(e.x, e.y)
 });
 
 function animate(){
+
+//data
+  saveData();
+  
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   //menu and boards
   if(state === "menu"){
   ctx.font = 25 + 'px ' + 'Courier New';
   ctx.fillText(middleMessage, 150, 150);
+  middleMessage = "HAHA FUNNY RPG"
+  optionA = "Load Game";
+  optionB = "New Game";
+  optionC = "Credits";
+  optionD = "How to Play";
+  if(selected === true){
+    if(selectNumber % 4 === 1){
+      selected = false;
+      retrieveData();
+      if(started === false){
+        
+      }
+      state = state;
+    }
+    if(selectNumber % 4 === 2){
+      
+    }
   }
+}
  
   ctx.font = 18 + 'px ' + 'Courier New';
   ctx.fillText(optionA, 106, 180);
@@ -93,16 +116,20 @@ if(!state === "menu" && !state === "credits" && !state === "load game" && !state
   //bottom bar message
   ctx.font = 14 + 'px ' + 'Courier New';
   ctx.fillText(bottomBarMessage, 104, 333);
-
-if(state === "menu"){
-optionA = "load game"
-  if(selected === true){
-    if(selectNumber % 4 === 1){
-      state = "load game";
-    }
-  }
-}
   
   requestAnimationFrame(animate);
 }
 animate();
+
+function saveData(){
+  window.localStorage.setItem('money', money);
+  window.localStorage.setItem('health', health);
+  window.localStorage.setItem('energy', energy);
+  window.localStorage.setItem('started', started);
+}
+function retrieveData(){
+  window.localStorage.getItem('money');
+  window.localStorage.getItem('health');
+  window.localStorage.getItem('energy');
+  window.localStorage.getItem('started');
+}
