@@ -9,8 +9,7 @@ let money = 20;
 let energy = 100;
 
 //messages
-let bottomBarMessage = "Navigate Using Arrow Keys";
-let middleMessage;
+let bottomBarMessage = "Navigate Using Arrow Keys"
 let optionA;
 let optionB;
 let optionC;
@@ -18,7 +17,7 @@ let optionD;
 
 //option selection
 let selectNumber = 0;
-let selected = false;
+let selected = 1;
 
 //game states
 let state = "menu";
@@ -50,7 +49,7 @@ window.addEventListener('keydown', e => {
       selectNumber++;
       break; 
     case 'x':
-      selected = true;
+      selected++;
       break;
   }
 });
@@ -70,23 +69,26 @@ function animate(){
   //menu and boards
   if(state === "menu"){
   ctx.font = 25 + 'px ' + 'Courier New';
-  ctx.fillText(middleMessage, 150, 150);
-  middleMessage = "HAHA FUNNY RPG"
+  ctx.fillText("HAHA FUNNY RPG", 150, 150);
   optionA = "Load Game";
   optionB = "New Game";
   optionC = "Credits";
   optionD = "How to Play";
-  if(selected === true){
-    if(selectNumber % 4 === 1){
-      selected = false;
+  if(selected % 2 === 0){
+    if(selectNumber % 4 === 0){
+      selected--;
       retrieveData();
       if(started === false){
-        
+        bottomBarMessage = "You haven't started yet, press X to go back";
+        if(selected % 2 === 1) {
+          selected = 0;
+          selectNumber = 0;
+          bottomBarMessage = "Navigate using arrow keys";
+        }
       }
-      state = state;
     }
-    if(selectNumber % 4 === 2){
-      
+    if(selectNumber % 4 === 2 && selected % 2 === 1){
+      //new game
     }
   }
 }
@@ -126,10 +128,12 @@ function saveData(){
   window.localStorage.setItem('health', health);
   window.localStorage.setItem('energy', energy);
   window.localStorage.setItem('started', started);
+  window.localStorage.setItem('state', state)
 }
 function retrieveData(){
   window.localStorage.getItem('money');
   window.localStorage.getItem('health');
   window.localStorage.getItem('energy');
   window.localStorage.getItem('started');
+  window.localStorage.getItem('state');
 }
