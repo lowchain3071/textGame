@@ -4,92 +4,77 @@ canvas.width = 640;
 canvas.height = 360;
 
 //player stats
-let health = 100;
-let money = 20;
-let energy = 100;
+let health;
+let inventory;
+let energy;
 
 //messages
-let bottomBarMessage = "Navigate Using Arrow Keys"
+let bottomBarMessage = "Navigate Using Arrow Keys";
+let middleMessage;
 let optionA;
 let optionB;
 let optionC;
 let optionD;
 
+
 //option selection
 let selectNumber = 0;
-let selected = 1;
+let selected = 0; //binary mode: 0 equals false, 1 equals two. remember to use modulus
 
 //game states
 let state = "menu";
 
+//keyboard events
+let keys = [];
 window.addEventListener('keydown', e => {
-  switch(e.key){
-    case 'ArrowUp' :
-      selectNumber--;
-      break;
-    case 'w':
-      selectNumber--;
-      break;
-    case 'ArrowLeft':
-      selectNumber--;
-      break;
-    case 'a':
-      selectNumber--;
-      break;
-    case 'ArrowDown':
-      selectNumber++;
-      break;
-    case 's':
-      selectNumber++;
-      break;
-    case 'ArrowRight': 
-      selectNumber++;
-      break;
-    case 'd': 
-      selectNumber++;
-      break; 
-    case 'x':
-      selected++;
-      break;
-  }
+if(!keys.includes(e.key)) keys.push(e.key);
 });
-started = false;
 
 window.addEventListener('click', e => {
   console.log(e.x, e.y)
 });
 
-function animate(){
+let gameFrame = 0;
 
-//data
-  saveData();
-  
+function animate(){
+  console.log(keys)
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+//keyboard input
+  if(keys.includes("ArrowUp")) {
+    selectNumber--;
+      keys.splice('ArrowUp')
+  }
+  if(keys.includes("ArrowDown")) {
+    selectNumber++;
+    keys.splice('ArrowDown')
+  }
 
   //menu and boards
   if(state === "menu"){
   ctx.font = 25 + 'px ' + 'Courier New';
-  ctx.fillText("HAHA FUNNY RPG", 150, 150);
+  ctx.fillText(middleMessage, 150, 150);
+  }
+if(state === "menu"){
+  middleMessage = "HAHA FUNNY RPG"
   optionA = "Load Game";
   optionB = "New Game";
   optionC = "Credits";
   optionD = "How to Play";
-  if(selected % 2 === 0){
+  if(selected === true){
     if(selectNumber % 4 === 0){
-      selected--;
-      retrieveData();
+      started = window.localStorage.getItem('started');
       if(started === false){
-        bottomBarMessage = "You haven't started yet, press X to go back";
-        if(selected % 2 === 1) {
-          selected = 0;
-          selectNumber = 0;
-          bottomBarMessage = "Navigate using arrow keys";
-        }
+        alert("You haven't started yet.");
+        state = "new game";
       }
+      health = window.localStorage.getItem('health');
+      inventory = window.localStorage.getItem('inventory');
+      energy = window.localStorage.getItem('energy');
+      selected = 0;
+      state = window.localStorage.getItem('state');
     }
-    if(selectNumber % 4 === 2 && selected % 2 === 1){
-      //new game
-    }
+    
   }
 }
  
@@ -120,20 +105,6 @@ if(!state === "menu" && !state === "credits" && !state === "load game" && !state
   ctx.fillText(bottomBarMessage, 104, 333);
   
   requestAnimationFrame(animate);
+  gameFrame++;
 }
 animate();
-
-function saveData(){
-  window.localStorage.setItem('money', money);
-  window.localStorage.setItem('health', health);
-  window.localStorage.setItem('energy', energy);
-  window.localStorage.setItem('started', started);
-  window.localStorage.setItem('state', state)
-}
-function retrieveData(){
-  window.localStorage.getItem('money');
-  window.localStorage.getItem('health');
-  window.localStorage.getItem('energy');
-  window.localStorage.getItem('started');
-  window.localStorage.getItem('state');
-}
