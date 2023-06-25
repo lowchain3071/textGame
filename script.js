@@ -77,6 +77,10 @@ if(state === "menu"){
     
   }
 }
+
+if(state === "new game"){
+  
+}
  
   ctx.font = 18 + 'px ' + 'Courier New';
   ctx.fillText(optionA, 106, 180);
