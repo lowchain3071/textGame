@@ -19,7 +19,8 @@ let optionD;
 
 //option selection
 let selectNumber = 0;
-let selected = 0; //binary mode: 0 equals false, 1 equals two. remember to use modulus
+let selected = 0; //binary mode: 0 equals false, 1 equals true. remember to use modulus
+function switchSelection(){selected++};
 
 //game states
 let state = "menu";
@@ -49,6 +50,10 @@ function animate(){
     selectNumber++;
     keys.splice('ArrowDown')
   }
+  if(keys.includes('x')){
+    switchSelection();
+    keys.splice('x');
+  }
 
   //menu and boards
   if(state === "menu"){
@@ -61,7 +66,7 @@ if(state === "menu"){
   optionB = "New Game";
   optionC = "Credits";
   optionD = "How to Play";
-  if(selected === true){
+  if(selected % 2 === 1){
     if(selectNumber % 4 === 0){
       started = window.localStorage.getItem('started');
       if(started === false){
@@ -74,13 +79,21 @@ if(state === "menu"){
       selected = 0;
       state = window.localStorage.getItem('state');
     }
-    
+    if(selectNumber % 4 === 1){
+      state = "new game";
+    }
   }
 }
 
 if(state === "new game"){
-  
+  if(confirm("Are you sure you want to create a new game? This will wipe out your current save.") === true){
+    window.localStorage.clear();
+    state = "crossroads";
+  }
 }
+
+  if(state = "crossroads"){
+  }
  
   ctx.font = 18 + 'px ' + 'Courier New';
   ctx.fillText(optionA, 106, 180);
