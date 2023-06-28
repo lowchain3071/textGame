@@ -71,7 +71,6 @@ if(state === "menu"){
       started = window.localStorage.getItem('started');
       if(started === false){
         alert("You haven't started yet.");
-        state = "new game";
       }
       health = window.localStorage.getItem('health');
       inventory = window.localStorage.getItem('inventory');
