@@ -88,11 +88,16 @@ if(state === "menu"){
 if(state === "new game"){
   if(confirm("Are you sure you want to create a new game? This will wipe out your current save.") === true){
     window.localStorage.clear();
+    health = 100;
+    
     state = "crossroads";
   }
 }
 
-  if(state = "crossroads"){
+  if(state === "crossroads"){
+    optionA = "go left";
+    optionB = "go right";
+    optionC = "go forward";
   }
  
   ctx.font = 18 + 'px ' + 'Courier New';
@@ -104,13 +109,19 @@ if(state === "new game"){
   ctx.font = 14 + 'px ' + 'Courier New';
   ctx.fillText(state, 0, 340);
 
-if(!state === "menu" && !state === "credits" && !state === "load game" && !state === "how to play"){
+  if(state === "crossroads" || state === "new game"){
   ctx.font = 12 + 'px ' + 'Courier New';
   ctx.fillText("HEALTH: " + health, 150, 100);
   ctx.fillText("MONEY: " + money, 250, 100);
   ctx.fillText("ENERGY: "+ energy, 350, 100);
   ctx.font = 20 + 'px ' + 'Courier New';
   ctx.fillText(middleMessage, 110, 94);
+
+  ctx.font = 18 + 'px ' + 'Courier New';
+  ctx.fillText(optionA, 106, 180);
+  ctx.fillText(optionB, 106, 210);
+  ctx.fillText(optionC, 106, 240);
+  ctx.fillText(optionD, 106, 270);
   }
 
   //arrow pointer and selection
