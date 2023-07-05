@@ -1,3 +1,7 @@
+if ('indexedDB' in window) {
+  console.log("This browser doesn't support IndexedDB");
+}
+
 const canvas = document.getElementById('canvas1');
 const ctx = canvas.getContext('2d');
 canvas.width = 640;
@@ -7,6 +11,7 @@ canvas.height = 360;
 let health;
 let inventory;
 let energy;
+let money;
 
 //messages
 let bottomBarMessage = "Navigate Using Arrow Keys";
@@ -24,6 +29,7 @@ function switchSelection(){selected++};
 
 //game states
 let state = "menu";
+let started;
 
 //keyboard events
 let keys = [];
@@ -74,6 +80,7 @@ if(state === "menu"){
       }
       health = window.localStorage.getItem('health');
       inventory = window.localStorage.getItem('inventory');
+      money = window.localStorage.getItem('money');
       energy = window.localStorage.getItem('energy');
       selected = 0;
       state = window.localStorage.getItem('state');
@@ -88,15 +95,27 @@ if(state === "new game"){
   if(confirm("Are you sure you want to create a new game? This will wipe out your current save.") === true){
     window.localStorage.clear();
     health = 100;
+    switchSelection();
     
     state = "crossroads";
   }
 }
 
   if(state === "crossroads"){
+    middleMessage = "Choose a direction to go in."
     optionA = "go left";
     optionB = "go right";
     optionC = "go forward";
+    optionD = "return to menu";
+    if(selected % 2 == 1){
+      if(selectNumber % 4 === 0){
+        //option one
+        //goleft
+        energy -= 2;
+        state = "cliff";
+      }
+    }
+    
   }
  
   ctx.font = 18 + 'px ' + 'Courier New';
@@ -108,13 +127,13 @@ if(state === "new game"){
   ctx.font = 14 + 'px ' + 'Courier New';
   ctx.fillText(state, 0, 340);
 
-  if(state === "crossroads" || state === "new game"){
+  if(state === "crossroads" || state === "new game" || state === "cliff"){
   ctx.font = 12 + 'px ' + 'Courier New';
   ctx.fillText("HEALTH: " + health, 150, 100);
   ctx.fillText("MONEY: " + money, 250, 100);
-  ctx.fillText("ENERGY: "+ energy, 350, 100);
+  ctx.fillText("ENERGY: "+ energy, 390, 100);
   ctx.font = 20 + 'px ' + 'Courier New';
-  ctx.fillText(middleMessage, 110, 94);
+  ctx.fillText(middleMessage, 180, 155);
 
   ctx.font = 18 + 'px ' + 'Courier New';
   ctx.fillText(optionA, 106, 180);
@@ -130,8 +149,15 @@ if(state === "new game"){
   //bottom bar message
   ctx.font = 14 + 'px ' + 'Courier New';
   ctx.fillText(bottomBarMessage, 104, 333);
-  
-  requestAnimationFrame(animate);
+
+
   gameFrame++;
+  window.localStorage.setItem('inventory', inventory);
+  window.localStorage.setItem('money', money);
+  window.localStorage.setItem('started', started);
+  window.localStorage.setItem('health', health);
+  window.localStorage.setItem('energy', energy);
+   
+  requestAnimationFrame(animate);
 }
 animate();
