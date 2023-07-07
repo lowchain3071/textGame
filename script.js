@@ -1,7 +1,3 @@
-if ('indexedDB' in window) {
-  console.log("This browser doesn't support IndexedDB");
-}
-
 const canvas = document.getElementById('canvas1');
 const ctx = canvas.getContext('2d');
 canvas.width = 640;
@@ -56,9 +52,9 @@ function animate(){
     selectNumber++;
     keys.splice('ArrowDown')
   }
-  if(keys.includes('x')){
+  if(keys.includes("Enter")){
     switchSelection();
-    keys.splice('x');
+    keys.splice("Enter");
   }
 
   //menu and boards
@@ -84,6 +80,7 @@ if(state === "menu"){
       energy = window.localStorage.getItem('energy');
       selected = 0;
       state = window.localStorage.getItem('state');
+
     }
     if(selectNumber % 4 === 1){
       state = "new game";
@@ -95,6 +92,8 @@ if(state === "new game"){
   if(confirm("Are you sure you want to create a new game? This will wipe out your current save.") === true){
     window.localStorage.clear();
     health = 100;
+    money = 20;
+    energy = 100;
     switchSelection();
     
     state = "crossroads";
@@ -111,12 +110,37 @@ if(state === "new game"){
       if(selectNumber % 4 === 0){
         //option one
         //goleft
+        selectNumber = 0;
         energy -= 2;
         state = "cliff";
+      }
+      if(selectNumber % 4 == 1){
+        selectNumber = 0;
+        selected = 0;
+        energy -= 6;
+        state = "forest"
+      }
+      if(selectNumber % 4 == 2){
+        selectNumber = 0;
+        selected = 0;
+        energy -= 3;
+        state = "mountain"
+      }
+      if(selectNumber % 4 == 3){
+        selectNumber = 0;
+        selected = 0;
+        state = "menu";
       }
     }
     
   }
+  if(state == "cliff"){
+    middleMessage = "You approached a cliff. Now what do you do?"
+    optionA = "scale the cliff";
+    optionB = "walk around it";
+    optionC = "attempt to zipline across";
+    optionD = "head back to crossroads"
+  } 
  
   ctx.font = 18 + 'px ' + 'Courier New';
   ctx.fillText(optionA, 106, 180);
@@ -127,13 +151,16 @@ if(state === "new game"){
   ctx.font = 14 + 'px ' + 'Courier New';
   ctx.fillText(state, 0, 340);
 
-  if(state === "crossroads" || state === "new game" || state === "cliff"){
+  if(state != "menu" && state != "new game"){
   ctx.font = 12 + 'px ' + 'Courier New';
   ctx.fillText("HEALTH: " + health, 150, 100);
   ctx.fillText("MONEY: " + money, 250, 100);
   ctx.fillText("ENERGY: "+ energy, 390, 100);
   ctx.font = 20 + 'px ' + 'Courier New';
-  ctx.fillText(middleMessage, 180, 155);
+  ctx.save();
+  ctx.textAlign = "center";
+  ctx.fillText(middleMessage, canvas.width/2, 155);
+  ctx.restore();
 
   ctx.font = 18 + 'px ' + 'Courier New';
   ctx.fillText(optionA, 106, 180);
