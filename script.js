@@ -5,7 +5,7 @@ canvas.height = 360;
 
 //player stats
 let health;
-let inventory;
+let inventory = [];
 let energy;
 let money;
 
@@ -56,6 +56,9 @@ function animate(){
     switchSelection();
     keys.splice("Enter");
   }
+  if(keys.includes(" ")){
+    if(state != "inventory"){state = "inventory"; keys.splice(" ")}else{console.log("broken system"); keys.splice(" ")}
+  }
 
   //menu and boards
   if(state === "menu"){
@@ -71,7 +74,7 @@ if(state === "menu"){
   if(selected % 2 === 1){
     if(selectNumber % 4 === 0){
       started = window.localStorage.getItem('started');
-      if(started === false){
+      if(started != true){
         alert("You haven't started yet.");
       }
       health = window.localStorage.getItem('health');
@@ -118,13 +121,13 @@ if(state === "new game"){
         selectNumber = 0;
         selected = 0;
         energy -= 6;
-        state = "forest"
+        state = "village"
       }
       if(selectNumber % 4 == 2){
         selectNumber = 0;
         selected = 0;
         energy -= 3;
-        state = "mountain"
+        state = "forest"
       }
       if(selectNumber % 4 == 3){
         selectNumber = 0;
@@ -132,8 +135,16 @@ if(state === "new game"){
         state = "menu";
       }
     }
-    
   }
+
+  if(state == "village"){
+    middleMessage = "Welcome to the village square";
+    optionA = "Get food";
+    optionB = "go to trainer";
+    optionC = "add to inventory";
+    optionD = "stay at inn"
+  }
+  
   if(state == "cliff"){
     middleMessage = "You approached a cliff. Now what do you do?"
     optionA = "scale the cliff";
