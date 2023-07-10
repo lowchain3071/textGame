@@ -12,8 +12,5 @@ Louis Chang - Game Developer
 Replit - code editing software
 HTML5, CSS3, Javascript ES6 - languages used
 Edits are pushed onto Github.
-
-The game canvas itself was drawn using the help of <canvas></canvas> html element.
-This game was made for the Gameboy Jam on itch.io
-
+The game canvas itself was drawn using the help of <canvas></canvas> html element, and shapes/text rendered via Canvas Drawing API 2D
 Have fun playing this game!
