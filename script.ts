@@ -210,7 +210,8 @@ if(state === "new game"){
 }
 animate();
 
-function saveProgress(){window.localStorage.setItem('inventory', inventory);
+function saveProgress(){
+  window.localStorage.setItem('inventory', inventory);
   window.localStorage.setItem('money', money);
   window.localStorage.setItem('started', started);
   window.localStorage.setItem('health', health);
