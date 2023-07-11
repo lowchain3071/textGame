@@ -40,6 +40,7 @@ window.addEventListener('click', e => {
 let gameFrame = 0;
 
 function animate(){
+  window.localStorage.setItem("started", true);
   console.log(keys)
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -144,6 +145,13 @@ if(state === "new game"){
     optionC = "add to inventory";
     optionD = "stay at inn"
   }
+  if(state == "forest"){
+    optionA = "venture further in the forest";
+    optionB = "set up a camp";
+    optionC = "gather food";
+    optionD = "go hunting";
+  }
+  
   
   if(state == "cliff"){
     middleMessage = "You approached a cliff. Now what do you do?"
@@ -152,6 +160,13 @@ if(state === "new game"){
     optionC = "attempt to zipline across";
     optionD = "head back to crossroads"
   } 
+
+  while(state == "inventory"){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.font = 30 + "px " + "Courier New";
+    ctx.textAlign = "Center";
+    ctx.fillText("inventory", 50, 50);
+  }
  
   ctx.font = 18 + 'px ' + 'Courier New';
   ctx.fillText(optionA, 106, 180);
