@@ -24,7 +24,7 @@ let selected = 0; //binary mode: 0 equals false, 1 equals true. remember to use 
 function switchSelection(){selected++};
 
 //game states
-let state = "menu";
+let state = "crossroads";
 let started;
 
 //keyboard events
@@ -58,7 +58,7 @@ function animate(){
     keys.splice("Enter");
   }
   if(keys.includes(" ")){
-    if(state != "inventory" && state != "menu" ){state = "inventory"; keys.splice(" ")}else{console.log("broken system"); keys.splice(" ")}
+    document.write("no");
   }
 
   //menu and boards
@@ -161,12 +161,6 @@ if(state === "new game"){
     optionD = "head back to crossroads"
   } 
 
-  while(state == "inventory"){
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.font = 30 + "px " + "Courier New";
-    ctx.textAlign = "Center";
-    ctx.fillText("inventory", 50, 50);
-  }
  
   ctx.font = 18 + 'px ' + 'Courier New';
   ctx.fillText(optionA, 106, 180);
@@ -207,9 +201,10 @@ if(state === "new game"){
   gameFrame++;
    
   requestAnimationFrame(animate);
+
+  while(gameFrame <= 20000000) console.log("no");
 }
 animate();
-
 function saveProgress(){
   window.localStorage.setItem('inventory', inventory);
   window.localStorage.setItem('money', money);
