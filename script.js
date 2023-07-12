@@ -20,11 +20,11 @@ let optionD;
 
 //option selection
 let selectNumber = 0;
-let selected = 0; //binary mode: 0 equals false, 1 equals true. remember to use modulus
+let  //binary mode: 0 equals false, 1 equals true. remember to use modulus
 function switchSelection(){selected++};
 
 //game states
-let state = "crossroads";
+let state = "menu";
 let started;
 
 //keyboard events
@@ -38,6 +38,26 @@ window.addEventListener('click', e => {
 });
 
 let gameFrame = 0;
+
+//inventory classes
+class weapon {
+  constructor(){
+  this.inventoryType = 0;
+  }
+}
+
+class food {
+  constructor(){
+  this.money = 0;
+  this.inventoryType = 1;
+  this.eaten = false;
+  this.energy = 0;
+  }
+  
+  eat(){
+  energy += this.energy;
+  }
+}
 
 function animate(){
   window.localStorage.setItem("started", true);
@@ -82,7 +102,7 @@ if(state === "menu"){
       inventory = window.localStorage.getItem('inventory');
       money = window.localStorage.getItem('money');
       energy = window.localStorage.getItem('energy');
-      selected = 0;
+      
       state = window.localStorage.getItem('state');
 
     }
@@ -114,25 +134,23 @@ if(state === "new game"){
       if(selectNumber % 4 === 0){
         //option one
         //goleft
-        selectNumber = 0;
+        resetselections();
         energy -= 2;
         state = "cliff";
       }
       if(selectNumber % 4 == 1){
-        selectNumber = 0;
-        selected = 0;
+        resetselections();
         energy -= 6;
         state = "village"
       }
       if(selectNumber % 4 == 2){
-        selectNumber = 0;
-        selected = 0;
+        resetselections();
         energy -= 3;
         state = "forest"
       }
       if(selectNumber % 4 == 3){
-        selectNumber = 0;
-        selected = 0;
+        resetselections();
+        
         state = "menu";
       }
     }
@@ -141,9 +159,29 @@ if(state === "new game"){
   if(state == "village"){
     middleMessage = "Welcome to the village square";
     optionA = "Get food";
-    optionB = "go to trainer";
-    optionC = "add to inventory";
-    optionD = "stay at inn"
+    optionB = "go to training/shop";
+    optionC = "stay at inn";
+    optionD = "leave village and return to crossroads"
+
+    if(selected % 2 == 1){
+      if(selectNumber % 4 == 0){
+      resetselections();
+      state = "town grocer";
+      }
+      if(selectNumber % 4 == 1){
+      resetselections();
+      state = "training shop";
+      }
+      if(selectNumber % 4 == 2){
+      resetselections();
+      state = "inn"
+      }
+      if(selectNumber % 4 == 3){
+      resetselections();
+      energy -= 6;
+      state = "crossroads";
+      }
+    }
   }
   if(state == "forest"){
     optionA = "venture further in the forest";
@@ -161,7 +199,7 @@ if(state === "new game"){
     optionD = "head back to crossroads"
   } 
 
- 
+ if(state != "inventory"){
   ctx.font = 18 + 'px ' + 'Courier New';
   ctx.fillText(optionA, 106, 180);
   ctx.fillText(optionB, 106, 210);
@@ -187,7 +225,6 @@ if(state === "new game"){
   ctx.fillText(optionB, 106, 210);
   ctx.fillText(optionC, 106, 240);
   ctx.fillText(optionD, 106, 270);
-  }
 
   //arrow pointer and selection
   if(selectNumber === -1) selectNumber = 3;
@@ -196,19 +233,24 @@ if(state === "new game"){
   //bottom bar message
   ctx.font = 14 + 'px ' + 'Courier New';
   ctx.fillText(bottomBarMessage, 104, 333);
+}
 
 
   gameFrame++;
    
   requestAnimationFrame(animate);
-
-  while(gameFrame <= 20000000) console.log("no");
 }
 animate();
+
+//functions
 function saveProgress(){
   window.localStorage.setItem('inventory', inventory);
   window.localStorage.setItem('money', money);
   window.localStorage.setItem('started', started);
   window.localStorage.setItem('health', health);
   window.localStorage.setItem('energy', energy);
+}
+function resetselection(){
+  selectNumber = 0;
+  selected = 0;
 }
