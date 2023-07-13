@@ -185,6 +185,8 @@ if(state === "new game"){
       }
     }
   }
+  //in town scenes
+
   if(state == "forest"){
     optionA = "venture further in the forest";
     optionB = "set up a camp";
