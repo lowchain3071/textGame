@@ -4,10 +4,10 @@ canvas.width = 640;
 canvas.height = 360;
 
 //player stats
-let health;
+let health = 100;
 let inventory = [];
-let energy;
-let money;
+let energy = 100;
+let money = 100;
 
 //messages
 let bottomBarMessage = "Navigate Using Arrow Keys";
@@ -20,11 +20,11 @@ let optionD;
 
 //option selection
 let selectNumber = 0;
-let  //binary mode: 0 equals false, 1 equals true. remember to use modulus
+let  selected = 0;//binary mode: 0 equals false, 1 equals true. remember to use modulus
 function switchSelection(){selected++};
 
 //game states
-let state = "menu";
+let state;
 let started;
 
 //keyboard events
@@ -58,6 +58,7 @@ class food {
   energy += this.energy;
   }
 }
+if(window.prompt("keyword?") = "hi")state = "crossroads";
 
 function animate(){
   window.localStorage.setItem("started", true);
@@ -78,7 +79,8 @@ function animate(){
     keys.splice("Enter");
   }
   if(keys.includes(" ")){
-    document.write("no");
+    state = "inventory";
+    keys.splice(" ");
   }
 
   //menu and boards
@@ -134,22 +136,22 @@ if(state === "new game"){
       if(selectNumber % 4 === 0){
         //option one
         //goleft
-        resetselections();
+        resetselection();
         energy -= 2;
         state = "cliff";
       }
       if(selectNumber % 4 == 1){
-        resetselections();
+        resetselection();
         energy -= 6;
         state = "village"
       }
       if(selectNumber % 4 == 2){
-        resetselections();
+        resetselection();
         energy -= 3;
         state = "forest"
       }
       if(selectNumber % 4 == 3){
-        resetselections();
+        resetselection();
         
         state = "menu";
       }
@@ -165,19 +167,19 @@ if(state === "new game"){
 
     if(selected % 2 == 1){
       if(selectNumber % 4 == 0){
-      resetselections();
+      resetselection();
       state = "town grocer";
       }
       if(selectNumber % 4 == 1){
-      resetselections();
+      resetselection();
       state = "training shop";
       }
       if(selectNumber % 4 == 2){
-      resetselections();
+      resetselection();
       state = "inn"
       }
       if(selectNumber % 4 == 3){
-      resetselections();
+      resetselection();
       energy -= 6;
       state = "crossroads";
       }
@@ -188,6 +190,28 @@ if(state === "new game"){
     optionB = "set up a camp";
     optionC = "gather food";
     optionD = "go hunting";
+    if(selected % 2 == 1){
+      if(selectNumber % 4 == 0){
+        
+      }else if(selectedNumber % 4 == 1){
+        state = "camp_setup"
+      }else if(selectNumber % 4 == 2){
+        if(energy < 15){
+          resetselection();
+          bottomBarMessage = "not enough energy..."
+        }else{
+          energy -= 8;
+          state = "food gathering"
+        }
+      }else if(selectNumber % 4 == 3){
+        if(energy < 25){
+          resetselection();
+          bottomBarMessage = "not enough energy..."
+        }else{
+          
+        }
+      }
+    }
   }
   
   
@@ -219,6 +243,7 @@ if(state === "new game"){
   ctx.textAlign = "center";
   ctx.fillText(middleMessage, canvas.width/2, 155);
   ctx.restore();
+    }
 
   ctx.font = 18 + 'px ' + 'Courier New';
   ctx.fillText(optionA, 106, 180);
@@ -233,6 +258,12 @@ if(state === "new game"){
   //bottom bar message
   ctx.font = 14 + 'px ' + 'Courier New';
   ctx.fillText(bottomBarMessage, 104, 333);
+}
+  while(state == "inventory"){
+   ctx.font = 30 + "px " + "Courier New";
+   ctx.textAlign = "center";
+   ctx.fillText("inventory", canvas.width/2, 50);
+   if(keys.includes(" ")) console.log("leaving...");
 }
 
 
