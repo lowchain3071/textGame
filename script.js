@@ -4,9 +4,9 @@ canvas.width = 640;
 canvas.height = 360;
 
 //player stats
-let health = 100;
+let health = 250;
 let inventory = [];
-let energy = 100;
+let energy = 250;
 let money = 100;
 
 //messages
@@ -16,16 +16,28 @@ let optionA;
 let optionB;
 let optionC;
 let optionD;
-
-
 //option selection
 let selectNumber = 0;
 let  selected = 0;//binary mode: 0 equals false, 1 equals true. remember to use modulus
 function switchSelection(){selected++};
 
 //game states
-let state;
+let state = "crossroads";
 let started;
+let lastState;
+let gameFrame = 0;
+
+//scene generation
+let forestoptions = ["mountain base", "abandoned camp", "camp setup", "forest exit", "cave enterance"]; //two slots for selection
+let clifftrail = ["mountain base", "cliff zipline", "camp setup", "cave enterance", "jump off cliff(SUICIDE)"]; //two slots for selection
+let town_options = ["grocer", "deli", "inn", "doctor", "browsing job offerings", "black market", "regular market", "bank", "gambling", "arcade", "library"];
+let mines_options = []; //all four slots are considered, so we need an abundance in this case.
+let generationArray = [];
+
+//time mechanism
+let timestamp = 0;
+let deltatime = 0;
+let lassttime = 0;
 
 //keyboard events
 let keys = [];
@@ -36,8 +48,6 @@ if(!keys.includes(e.key)) keys.push(e.key);
 window.addEventListener('click', e => {
   console.log(e.x, e.y)
 });
-
-let gameFrame = 0;
 
 //inventory classes
 class weapon {
@@ -58,7 +68,6 @@ class food {
   energy += this.energy;
   }
 }
-if(window.prompt("keyword?") = "hi")state = "crossroads";
 
 function animate(){
   window.localStorage.setItem("started", true);
@@ -148,11 +157,10 @@ if(state === "new game"){
       if(selectNumber % 4 == 2){
         resetselection();
         energy -= 3;
-        state = "forest"
+        state = "forest_initial"
       }
       if(selectNumber % 4 == 3){
         resetselection();
-        
         state = "menu";
       }
     }
@@ -160,15 +168,15 @@ if(state === "new game"){
 
   if(state == "village"){
     middleMessage = "Welcome to the village square";
-    optionA = "Get food";
+    optionA = "Get food, replinish supplies/health";
     optionB = "go to training/shop";
     optionC = "stay at inn";
-    optionD = "leave village and return to crossroads"
+    optionD = "leave village and return to " + lastState;
 
     if(selected % 2 == 1){
       if(selectNumber % 4 == 0){
       resetselection();
-      state = "town grocer";
+      state = "inventory";
       }
       if(selectNumber % 4 == 1){
       resetselection();
@@ -185,43 +193,160 @@ if(state === "new game"){
       }
     }
   }
-  if(state == "forest"){
+  //town mechanism
+
+
+  if(state == "forest_initial"){
     optionA = "venture further in the forest";
     optionB = "set up a camp";
     optionC = "gather food";
     optionD = "go hunting";
     if(selected % 2 == 1){
-      if(selectNumber % 4 == 0){
-        
-      }else if(selectedNumber % 4 == 1){
-        state = "camp_setup"
-      }else if(selectNumber % 4 == 2){
-        if(energy < 15){
-          resetselection();
-          bottomBarMessage = "not enough energy..."
-        }else{
-          energy -= 8;
-          state = "food gathering"
+        if(selectNumber % 4 == 0){
+            resetselection();
+            state = "random_forest_scene_generation";
         }
-      }else if(selectNumber % 4 == 3){
-        if(energy < 25){
+        if(selectNumber % 4 == 1){
           resetselection();
-          bottomBarMessage = "not enough energy..."
-        }else{
-          
+          state = "camping";
+        }
+        if(selectNumber % 4 == 2){
+            resetselection();
+            if(energy < 15){
+                bottomBarMessage = "not enough energy. you need 15 to gather food.";
+            }else{
+              state = "food gathering";
+            }
+        }
+        if(selectNumber % 4 == 3){
+            resetselection();
+            if(energy < 25){
+                bottomBarMessage = "not enough energy. you need 25 to hunt.";
+            }else{
+                state = "hunting";
+            }
+        }
+    }
+  }
+  //forest living mechanism
+  //forest scene spawn
+  if(state = "random_forest_scene_generation"){
+    forestoption = ["explore mountain base", "enter spotted abandoned camp", "start camp setup", "go to forest exit", "enter cave enterance", "end"];
+    generatedArray = generatescene(1, forestoptions);
+    middleMessage = "You venture further in to the forest."
+    optionA = generatedArray[1];
+    optionB = "explore further in the forest";
+    optionC = "gather food";
+    optionD = "go hunting";
+    if(selected % 2 == 1){
+      if(selectNumber % 4 == 0){
+        resetselection();
+        switch(optionA){
+          case "explore mountain base":
+            state = "mountain base";
+            break;
+          case "enter spotted abandoned camp":
+            state = "abandoned camp";
+            break;
+          case "start camp setup":
+            state = "camp setup";
+            break;
+          case "go to forest exit":
+            state = "forest exit";
+            break;
+          case "enter cave enterance":
+            state = "cave enterance";
+            break;
+          default:
+            console.log("ERROR: NO STATE DETECTED");
+        }
+      if(selectNumber % 4 == 1){
+        energy -= Math.floor(Math.random() * 7);
+        resetselection();
+        state = "random_forest_scene_generation"
+      }
+        if(selectNumber % 4 == 2){
+            resetselection();
+            if(energy < 15){
+                bottomBarMessage = "not enough energy. you need 15 to gather food.";
+            }else{
+              state = "food gathering";
+            }
+        }
+        if(selectNumber % 4 == 3){
+            resetselection();
+            if(energy < 25){
+                bottomBarMessage = "not enough energy. you need 25 to hunt.";
+            }else{
+                state = "hunting";
+            }
         }
       }
     }
   }
-  
-  
+  //camping
+  while(state = "camp setup"){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    middleMessage = "You decided to set up a camp";
+  }
+  //food gathering
+  //hunting
+
   if(state == "cliff"){
     middleMessage = "You approached a cliff. Now what do you do?"
     optionA = "scale the cliff";
-    optionB = "walk around it";
+    optionB = "walk further in";
     optionC = "attempt to zipline across";
-    optionD = "head back to crossroads"
+    optionD = "head back to " + lastState;
+    if(selected % 2 == 0){
+      resetselection();
+      if(energy > 20){
+        state = "cliff face";
+      }else{
+        bottomBarMessage = "whelp, you don't have enough energy...";
+      }
+      if(selectNumber % 2 == 1){
+        resetselection();
+        state = "cliff_trail_spawn";
+      }
+      if(selectNumber % 2 == 2){
+        if(energy < 10){
+          resetselection();
+          state = "zipline_unpredictable";
+        }else{
+          resetselection();
+          bottomBarMessage = "not enough energy to zipline."
+        }
+      }
+      if(selectNumber % 2 == 3){
+        resetselection();
+        state = lastState;
+      }
+    }
   } 
+  //cliff mechanism
+  if(state = "cliff_trail_spawn"){
+    clifftrail = ["explore nearby mountain base", "zipline past cliff", "start camp setup", "explore cave enterance", "jump off cliff(SUICIDE)", "end"];
+    generatedArray = generatescene(3, clifftrail);
+    middleMessage = "You walked further in the cliff";
+    optionA = "go even further";
+    optionB = generatedArray[0];
+    optionC = generatedArray[1];
+    optionD = generationArray[2];
+    if(selected % 2 == 1){
+        resetselection();
+        if(selectNumber % 4 == 0){
+            state = "cliff_trail_spawn";
+        }
+        if(selectNumber % 4 == 1){
+            switch(optionB){
+                case "explore nearby mountain base":
+                    energy -= 2;
+                    state = "mountain base";
+            }
+        }
+    }
+  }
 
  if(state != "inventory"){
   ctx.font = 18 + 'px ' + 'Courier New';
@@ -259,16 +384,17 @@ if(state === "new game"){
   ctx.font = 14 + 'px ' + 'Courier New';
   ctx.fillText(bottomBarMessage, 104, 333);
 }
+
+//inventory mechanism
   while(state == "inventory"){
    ctx.font = 30 + "px " + "Courier New";
    ctx.textAlign = "center";
    ctx.fillText("inventory", canvas.width/2, 50);
-   if(keys.includes(" ")) console.log("leaving...");
+   if(keys.includes(" ")) state = "lastState";
 }
 
-
-  gameFrame++;
-   
+  findTime();
+  gameFrame++;   
   requestAnimationFrame(animate);
 }
 animate();
@@ -281,7 +407,38 @@ function saveProgress(){
   window.localStorage.setItem('health', health);
   window.localStorage.setItem('energy', energy);
 }
-function resetselection(){
+function resetselection() {
   selectNumber = 0;
   selected = 0;
+  lastState = state;
+  saveProgress();
+}
+function findTime(){
+    deltatime = (new Date(),getDate() - startTime)/gameFrames;
+    timestamp += deltatime;
+}
+
+//scene generation functions
+function generatescene(slots, array){
+  let loopIndex = 0;
+  let generatedNumber;
+  let randomNumbers = [];
+  let generatedOptions = [];
+  while(loopIndex < slots){
+    generatedNumber = Math.floor(Math.random() * (array.lastIndexOf("end") - 1));
+    if(!randomNumbers.includes(generatedNumber)){
+      randomNumbers.push(generatedNumber);
+      loopIndex++;
+    }
+  }
+  for(let index = 0; index <= slots; index++){
+    generatedOptions.push(array[randomNumbers[index]]);
+  }
+  return generatedOptions;
+}
+//time function
+function findTime(){
+    timestamp = new Date().getMilliseconds();
+    deltatime = timestamp - lassttime;
+    lasttime = timestamp;
 }
