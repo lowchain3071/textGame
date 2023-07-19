@@ -1,3 +1,4 @@
+document.write("running...");
 import checkgeneration from "./scenegeneration.js"
 
 const canvas = document.getElementById('canvas1');

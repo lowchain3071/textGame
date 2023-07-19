@@ -3,6 +3,7 @@
 Hello folks, this is a text-based game made on Replit, uploaded on Github, and published on itch.io. We hope you enjoy this game, otherwise known as "Haha funny RPG". link: 
 
 [Haha Funny RPG](https://lowchain3071.itch.io/haha-funny-rpg)
+
 ---
 
  Nacho                   This is Paul. Paul is but a figment of your imagination. He is whatever you want him to be. Whether that means he is a friend or foe, once you stop imagining, Paul is dead. When you think about him, he will come back to life. Copy and paste this message and spread it everywhere. Let Paul take over and enslave people's minds using the fear of Paul dying forever... Join my conquest to use paul to take over the world once and for all, or you must perish in your sleep, stretching your rest forever. Paul created DHMO, a deadly substance. Click here for more on DHMO------>        [Facts About Dihydrogen Monoxide (dhmo.org)](https://dhmo.org/facts.html) It has the same chemical compound as water, but don't be fooled!
