@@ -28,16 +28,16 @@ let lastState;
 let gameFrame = 0;
 
 //scene generation
-let forestoptions = ["mountain base", "abandoned camp", "camp setup", "forest exit", "cave enterance"]; //two slots for selection
-let clifftrail = ["mountain base", "cliff zipline", "camp setup", "cave enterance", "jump off cliff(SUICIDE)"]; //two slots for selection
-let town_options = ["grocer", "deli", "inn", "doctor", "browsing job offerings", "black market", "regular market", "bank", "gambling", "arcade", "library"];
-let mines_options = []; //all four slots are considered, so we need an abundance in this case.
+let forestoptions = [];
+let clifftrail = [];
+let town_options = [];
+let mines_options = [];
 let generationArray = [];
 
 //time mechanism
 let timestamp = 0;
 let deltatime = 0;
-let lassttime = 0;
+let lasttime = 0;
 
 //keyboard events
 let keys = [];
@@ -68,6 +68,8 @@ class food {
   energy += this.energy;
   }
 }
+
+document.write("setup done");
 
 function animate(){
   window.localStorage.setItem("started", true);
@@ -193,16 +195,15 @@ if(state === "new game"){
       }
     }
   }
-<<<<<<< HEAD
   //town mechanism
 
 
   if(state == "forest_initial"){
-=======
+    
+  }
   //in town scenes
 
   if(state == "forest"){
->>>>>>> 0ba7e05006b387093b1895313de3edf6533a5cb9
     optionA = "venture further in the forest";
     optionB = "set up a camp";
     optionC = "gather food";
@@ -234,13 +235,48 @@ if(state === "new game"){
         }
     }
   }
+
+  if(state == "cliff"){
+    middleMessage = "You approached a cliff. Now what do you do?"
+    optionA = "scale the cliff";
+    optionB = "walk further in";
+    optionC = "attempt to zipline across";
+    optionD = "head back to " + lastState;
+    if(selected % 2 == 0){
+      resetselection();
+      if(energy > 20){
+        state = "cliff face";
+      }else{
+        bottomBarMessage = "whelp, you don't have enough energy...";
+      }
+      if(selectNumber % 2 == 1){
+        resetselection();
+        state = "cliff_trail_spawn";
+      }
+      if(selectNumber % 2 == 2){
+        if(energy < 10){
+          resetselection();
+          state = "zipline_unpredictable";
+        }else{
+          resetselection();
+          bottomBarMessage = "not enough energy to zipline."
+        }
+      }
+      if(selectNumber % 2 == 3){
+        resetselection();
+        state = lastState;
+      }
+    }
+  } 
+  //spontaneous generation
+  
   //forest living mechanism
   //forest scene spawn
   if(state = "random_forest_scene_generation"){
-    forestoption = ["explore mountain base", "enter spotted abandoned camp", "start camp setup", "go to forest exit", "enter cave enterance", "end"];
-    generatedArray = generatescene(1, forestoptions);
+    forestoptions = ["explore mountain base", "enter spotted abandoned camp", "start camp setup", "go to forest exit", "enter cave enterance", "end"];
+    generationArray = generatescene(1, forestoptions);
     middleMessage = "You venture further in to the forest."
-    optionA = generatedArray[1];
+    optionA = generationArray[1];
     optionB = "explore further in the forest";
     optionC = "gather food";
     optionD = "go hunting";
@@ -297,59 +333,82 @@ if(state === "new game"){
   }
   //food gathering
   //hunting
-
-  if(state == "cliff"){
-    middleMessage = "You approached a cliff. Now what do you do?"
-    optionA = "scale the cliff";
-    optionB = "walk further in";
-    optionC = "attempt to zipline across";
-    optionD = "head back to " + lastState;
-    if(selected % 2 == 0){
-      resetselection();
-      if(energy > 20){
-        state = "cliff face";
-      }else{
-        bottomBarMessage = "whelp, you don't have enough energy...";
-      }
-      if(selectNumber % 2 == 1){
-        resetselection();
-        state = "cliff_trail_spawn";
-      }
-      if(selectNumber % 2 == 2){
-        if(energy < 10){
-          resetselection();
-          state = "zipline_unpredictable";
-        }else{
-          resetselection();
-          bottomBarMessage = "not enough energy to zipline."
-        }
-      }
-      if(selectNumber % 2 == 3){
-        resetselection();
-        state = lastState;
-      }
-    }
-  } 
   //cliff mechanism
   if(state = "cliff_trail_spawn"){
     clifftrail = ["explore nearby mountain base", "zipline past cliff", "start camp setup", "explore cave enterance", "jump off cliff(SUICIDE)", "end"];
-    generatedArray = generatescene(3, clifftrail);
+    generationArray = generatescene(3, clifftrail);
     middleMessage = "You walked further in the cliff";
     optionA = "go even further";
-    optionB = generatedArray[0];
-    optionC = generatedArray[1];
-    optionD = generationArray[2];
+    optionB = generationArray[0];
+    optionC = generationArray[1];
+    optionD = "go back";
     if(selected % 2 == 1){
         resetselection();
         if(selectNumber % 4 == 0){
+          resetselection();
             state = "cliff_trail_spawn";
         }
         if(selectNumber % 4 == 1){
+          resetselection();
             switch(optionB){
-                case "explore nearby mountain base":
-                    energy -= 2;
-                    state = "mountain base";
+              case "explore nearby mountain base":
+                energy -= 2;
+                state = "mountain base";
+              case "zipline past cliff":
+                if(energy < 10){
+                  if(inventory.includes("zipline")){
+                    state = "zipline_attempt";
+                    break;
+                  }else{
+                    bottomBarMessage = "You don't have a zipline. Go to town if you can."
+                    state = "cliff_trail_spawn";
+                  }
+                }else{
+                  bottomBarMessage = "not enough energy to zipline";
+                }
+              case "start camp setup":
+                state = "camp setup";
+                break;
+              case "explore cave enterance":
+                energy -= 1.5;
+                break;
+              case "jump off cliff(SUICIDE)":
+                state = "death";
+                break;
             }
+        }
+        if(selectNumber % 4 == 2){
+            resetselection();
+            switch(optionC){
+              case "explore nearby mountain base":
+                energy -= 2;
+                state = "mountain base";
+              case "zipline past cliff":
+                if(energy < 10){
+                  if(inventory.includes("zipline")){
+                    state = "zipline_attempt";
+                    break;
+                  }else{
+                    bottomBarMessage = "You don't have a zipline. Go to town if you can."
+                    state = "cliff_trail_spawn";
+                  }
+                }else{
+                  bottomBarMessage = "not enough energy to zipline";
+                }
+              case "start camp setup":
+                state = "camp setup";
+                break;
+              case "explore cave enterance":
+                energy -= 1.5;
+                break;
+              case "jump off cliff(SUICIDE)":
+                state = "death";
+                break;
+            }
+        }
+        if (selectNumber % 4 == 3) {
+          resetselection();
+          state = lastState;
         }
     }
   }
@@ -374,7 +433,7 @@ if(state === "new game"){
   ctx.textAlign = "center";
   ctx.fillText(middleMessage, canvas.width/2, 155);
   ctx.restore();
-    }
+  }
 
   ctx.font = 18 + 'px ' + 'Courier New';
   ctx.fillText(optionA, 106, 180);
@@ -417,6 +476,7 @@ function resetselection() {
   selectNumber = 0;
   selected = 0;
   lastState = state;
+  bottomBarMessage = "use arrow keys and enter to navigate";
   saveProgress();
 }
 function findTime(){
@@ -424,6 +484,12 @@ function findTime(){
     timestamp += deltatime;
 }
 
+//time function
+function findTime(){
+    timestamp = new Date().getMilliseconds();
+    deltatime = timestamp - lasttime;
+    lasttime = timestamp;
+}
 //scene generation functions
 function generatescene(slots, array){
   let loopIndex = 0;
@@ -435,16 +501,7 @@ function generatescene(slots, array){
     if(!randomNumbers.includes(generatedNumber)){
       randomNumbers.push(generatedNumber);
       loopIndex++;
+      }
     }
+    return generatedOptions;
   }
-  for(let index = 0; index <= slots; index++){
-    generatedOptions.push(array[randomNumbers[index]]);
-  }
-  return generatedOptions;
-}
-//time function
-function findTime(){
-    timestamp = new Date().getMilliseconds();
-    deltatime = timestamp - lassttime;
-    lasttime = timestamp;
-}
