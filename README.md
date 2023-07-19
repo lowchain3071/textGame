@@ -19,6 +19,6 @@ Hello folks, this is a text-based game made on Replit, uploaded on Github, and p
 Paul---------------------------------|
 ---
 
-You can contact me for more imformation using my [email](louisc031010@gmail.com).
+You can contact me for more imformation using my [email](mailto:louisc031010@gmail.com?subject=Question).
 
 From July 20, 2023 at 3:05PM to August 10, 2023 at 8:15AM, I will not be able to update this game due to the fact that I am doing this on my chromebook, and my chromebook won't connect to my home internet so I will be doing this offline on VScode, running the code via my files app. This is due to summer school (where there's school internet) ending, and school starts on August 10, with first period starting 8:20 AM but I should be there a few minutes earlier. One way or another, farewell.
