@@ -1,10 +1,9 @@
-document.write("running...");
-import checkgeneration from "./scenegeneration.js"
-
 const canvas = document.getElementById('canvas1');
 const ctx = canvas.getContext('2d');
 canvas.width = 640;
 canvas.height = 360;
+
+document.write
 
 //player stats
 let health = 250;
@@ -198,13 +197,6 @@ if(state === "new game"){
       }
     }
   }
-  //town mechanism
-
-
-  if(state == "forest_initial"){
-    
-  }
-  //in town scenes
 
   if(state == "forest_initial"){
     optionA = "venture further in the forest";
@@ -317,7 +309,6 @@ if(state === "new game"){
    if(keys.includes(" ")) state = "lastState";
 }
 
-  checkgeneration(state, forestoption, clifftrail, town_option, generationArray, middleMessage, optionA, optionB, optionC, optionD, resetselection, selectNumber, selected, ctx, canvas);
   findTime();
   gameFrame++;   
   requestAnimationFrame(animate);

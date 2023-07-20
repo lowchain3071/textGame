@@ -1,5 +1,6 @@
-export default function checkgeneration(state, forestoptions, clifftrail, town_option, generationArray, middleMessage, optionA, optionB, optionC, optionD, resetselection, selectNumber, selected, ctx, canvas){
+export default function checkgeneration(state, forestoptions, clifftrail, town_option, generationArray, middleMessage, optionA, optionB, optionC, optionD, resetselection, selectNumber, selected, ctx, canvas, bottomBarMessage, energy){
   //spontaneous generation
+  document.write("reading function...")
   
   //forest living mechanism
   //forest scene spawn
